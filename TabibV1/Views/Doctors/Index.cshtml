@@ -1,0 +1,249 @@
+﻿@model IEnumerable<TabibV1.Models.doctors>
+@using Newtonsoft.Json;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<br />
+<br />
+<br />
+        <div class="row">
+            <div class="col-md-12">
+                <div id="googleMap" style="width:100%;height:400px;border-radius:10px;"></div>
+                <script>
+                    function myMap() {
+                        var map = new google.maps.Map(document.getElementById("googleMap"), {
+                            center: new google.maps.LatLng(51.508742, -0.120850),
+                            zoom: 5,
+                        });
+                        debugger;
+                      
+                        //var a=   2Html.Raw(Json.Encode(2ViewBag.Loaction));
+                        //var b= 2Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(2ViewBag.Loaction));
+                        var items = JSON.parse('@ViewBag.Loactions');
+
+                        items.forEach(function (e) {
+
+                            var marker = new google.maps.Marker({
+                                position: new google.maps.LatLng(e.lat, e.lang)
+                            });
+                            marker.setMap(map);
+
+                            var infowindow = new google.maps.InfoWindow({ content: e.mess });
+                            google.maps.event.addListener(marker, 'click', function () { infowindow.open(map, marker); });
+
+
+
+                        });
+                    }</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            </div>
+        </div>
+
+        <br />
+        <hr />
+        <br />
+
+@*if (Model.Count() > 0) {*@ 
+  <div class="row">
+      @using (Html.BeginForm("Index", "Doctors")) { 
+          <div class="col-md-5">
+              <div class="col-md-6">
+                  <input class="form-control" type="text" name="username" placeholder="userName" value="@ViewBag.search[0]" />
+              </div>
+              <div class="col-md-6">
+                  <input class="form-control" type="text" name="lastname" placeholder="lastName" value="@ViewBag.search[1]" />
+              </div>
+
+          </div>
+          <div class="col-md-2">
+              @Html.DropDownListFor(model => model.FirstOrDefault().specialty, new SelectList(Enum.GetValues(typeof(TabibV1.Models.specialty))), new { @class = "form-control", @value = ViewBag.search[3] })
+          </div>
+          <div class="col-md-2">
+              <input class="form-control" type="number" max="5" min="1" name="evelate" placeholder="evelate from 5" value="@ViewBag.search[2]" />
+          </div>
+          <div class="col-md-2">
+              <input class="form-control" type="text" name="address" placeholder="address" value="@ViewBag.search[4]" />
+          </div>
+          <div class="col-md-1">
+              <span style="align-content:center" class="input-group-btn">
+                  <button class="btn btn-primary" type="submit" name="search" value="">
+                      <span class="glyphicon glyphicon-search"></span>
+                  </button>
+              </span>
+
+          </div>
+      }
+            </div>
+            <br />
+    <br />
+
+
+        @for (var e = 0; e < Model.Count(); e = e + 3)
+    {
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="media" style="border:1px solid #ccc;margin-top:0px;padding:10px 1px 10px 10px;border-radius:10px;">
+                        <div class="media-left">
+                            <img src="@Model.ElementAt(e).user.PathOfImage" class="media-object" style="width:60px;border-radius:5px;">
+                        </div>
+                        <div class="media-body">
+                            <h4 class="media-heading">@Model.ElementAt(e).user.UserName @Model.ElementAt(e).user.LastName  <small><i>@Model.ElementAt(e).specialty</i></small></h4>
+                            <p>
+                                <span class="glyphicon glyphicon-star-empty"></span>&emsp;
+                                @for (int i = 0; i < 5; i++)
+                        {
+                            if (i < @Model.ElementAt(e).evaluate)
+                            {
+                                <span class="glyphicon glyphicon-star"></span>
+                            }
+                            else
+                            {
+                                <span class="glyphicon glyphicon-star-empty"></span>
+                            }
+                        }
+                            </p>
+                            <p><span class="glyphicon glyphicon-time"></span>&emsp; @Html.DisplayFor(m=>m.ElementAt(e).DoctorAppointments.firstFrom)  to @Html.DisplayFor(m=>m.ElementAt(e).DoctorAppointments.firstTo)  </p>
+                            <p><span class="glyphicon glyphicon-time"></span>&emsp; @Html.DisplayFor(m=>m.ElementAt(e).DoctorAppointments.secondFrom)  to @Html.DisplayFor(m=>m.ElementAt(e).DoctorAppointments.secondTo) </p>
+                            <p><span class="glyphicon glyphicon-calendar"></span>&emsp; @Model.ElementAt(e).DoctorAppointments.GetStringDays() </p>
+                            <p><span class="glyphicon glyphicon-map-marker"></span>&emsp;  @Model.ElementAt(e).address.textAddress </p>
+                            @if (User.IsInRole("Admin"))
+                    {
+                                <a class="btn btn-default  glyphicon glyphicon-edit" style="float: left; margin: 10px;" href="@Url.Action("Edit", "Doctors", new { id = @Model.ElementAt(e).doctorsId })"> </a>
+                        using (Html.BeginForm("Delete", "Doctors", FormMethod.Post))
+                        {
+                            @Html.HiddenFor(model => @Model.ElementAt(e).doctorsId)
+                                <button type="submit" onclick="return window.confirm('Delete Artical \nAre you sure you want to delete this Artial?')" class="btn btn-default glyphicon glyphicon-trash" style="margin:10px;"></button>
+                                @Html.AntiForgeryToken()
+                        }
+                    }
+
+                        </div>
+                    </div>
+                </div>
+
+                @if((e+1)<Model.Count()){
+                    <div class="col-md-4">
+                        <div class="media" style="border:1px solid #ccc;margin-top:0px;padding:10px 1px 10px 10px;border-radius:10px;">
+                            <div class="media-left">
+                                <img src="@Model.ElementAt(e+1).user.PathOfImage" class="media-object" style="width:60px;border-radius:5px;">
+                            </div>
+                            <div class="media-body">
+                                <h4 class="media-heading">@Model.ElementAt(e+1).user.UserName @Model.ElementAt(e+1).user.LastName  <small><i>@Model.ElementAt(e+1).specialty</i></small></h4>
+                                <p>
+                                    <span class="glyphicon glyphicon-star-empty"></span>&emsp;
+                                    @for (int i = 0; i < 5; i++)
+                        {
+                            if (i < @Model.ElementAt(e+1).evaluate)
+                            {<span class="glyphicon glyphicon-star"></span>
+                            }
+                            else
+                            {
+                                <span class="glyphicon glyphicon-star-empty"></span>
+                            }
+                        }
+                                </p>
+                                <p><span class="glyphicon glyphicon-time"></span>&emsp; @Html.DisplayFor(m=>m.ElementAt(e+1).DoctorAppointments.firstFrom)  to @Html.DisplayFor(m=>m.ElementAt(e + 1).DoctorAppointments.firstTo)  </p>
+                                <p><span class="glyphicon glyphicon-time"></span>&emsp; @Html.DisplayFor(m=>m.ElementAt(e + 1).DoctorAppointments.secondFrom)  to @Html.DisplayFor(m=>m.ElementAt(e + 1).DoctorAppointments.secondTo) </p>
+                                <p><span class="glyphicon glyphicon-calendar"></span>&emsp; @Model.ElementAt(e + 1).DoctorAppointments.GetStringDays() </p>
+                                <p><span class="glyphicon glyphicon-map-marker"></span>&emsp;  @Model.ElementAt(e+1).address.textAddress </p>
+                                @if (User.IsInRole("Admin"))
+                    {
+                                    <a class="btn btn-default  glyphicon glyphicon-edit" style="float: left; margin: 10px;" href="@Url.Action("Edit", "Doctors", new { id = @Model.ElementAt(e+1).doctorsId })"> </a>
+                        using (Html.BeginForm("Delete", "Doctors", FormMethod.Post))
+                        {
+                            @Html.HiddenFor(model => @Model.ElementAt(e+1).doctorsId)
+                                    <button type="submit" onclick="return window.confirm('Delete Artical \nAre you sure you want to delete this Artial?')" class="btn btn-default glyphicon glyphicon-trash" style="margin:10px;"></button>
+                                    @Html.AntiForgeryToken()
+                        }
+                    }
+                            </div>
+                        </div>
+                    </div>
+        }
+
+                @if ((e + 2) < Model.Count()) {
+                    <div class="col-md-4">
+                        <div class="media" style="border:1px solid #ccc;margin-top:0px;padding:10px 1px 10px 10px;border-radius:10px;">
+                            <div class="media-left">
+                                <img src="@Model.ElementAt(e+2).user.PathOfImage" class="media-object" style="width:60px;border-radius:5px;">
+                            </div>
+                            <div class="media-body">
+                                <h4 class="media-heading">@Model.ElementAt(e+2).user.UserName @Model.ElementAt(e+2).user.LastName  <small><i>@Model.ElementAt(e+2).specialty</i></small></h4>
+                                <p>
+                                    <span class="glyphicon glyphicon-star-empty"></span>&emsp;
+                                    @for (int i = 0; i < 5; i++)
+                        {
+                            if (i < @Model.ElementAt(e+2).evaluate)
+                            {<span class="glyphicon glyphicon-star"></span>
+                            }
+                            else
+                            {
+                                <span class="glyphicon glyphicon-star-empty"></span>
+                            }
+                        }
+                                </p>
+                                <p><span class="glyphicon glyphicon-time"></span>&emsp;@Html.DisplayFor(m=>m.ElementAt(e + 2).DoctorAppointments.firstFrom)  to @Html.DisplayFor(m=>m.ElementAt(e + 2).DoctorAppointments.firstTo)  </p>
+                                <p><span class="glyphicon glyphicon-time"></span>&emsp;@Html.DisplayFor(m=>m.ElementAt(e + 2).DoctorAppointments.secondFrom)  to @Html.DisplayFor(m=>m.ElementAt(e + 2).DoctorAppointments.secondTo) </p>
+                                <p><span class="glyphicon glyphicon-calendar"></span>&emsp; @Model.ElementAt(e + 2).DoctorAppointments.GetStringDays() </p>
+                                <p><span class="glyphicon glyphicon-map-marker"></span>&emsp;  @Model.ElementAt(e+2).address.textAddress </p>
+                                @if (User.IsInRole("Admin"))
+                    {
+                                    <a class="btn btn-default  glyphicon glyphicon-edit" style="float: left; margin: 10px;" href="@Url.Action("Edit", "Doctors", new { id = @Model.ElementAt(e+2).doctorsId })"> </a>
+                        using (Html.BeginForm("Delete", "Doctors", FormMethod.Post))
+                        {
+                            @Html.HiddenFor(model => @Model.ElementAt(e+2).doctorsId)
+                                    <button type="submit" onclick="return window.confirm('Delete Artical \nAre you sure you want to delete this Artial?')" class="btn btn-default glyphicon glyphicon-trash" style="margin:10px;"></button>
+                                    @Html.AntiForgeryToken()
+                        }
+                    }
+                            </div>
+                        </div>
+                    </div>
+        }
+            </div>
+
+            <br />
+            <hr />
+            <br />
+    }
+        @if (Model.Count() == 0)
+    {
+            <h3 style="text-align:center;">No Item</h3>
+    }
+    else
+    {
+            <div class="row">
+                <div class="col-md-12">
+                    @Html.Partial("_PaggingPartial")
+                </div>
+            </div>}
+
+        @if (User.IsInRole("Admin"))
+    {
+            <button type="button" class="btn btn-default" style="align-items:center">@Html.ActionLink("New Doctor", "Create")</button>
+            <hr />
+
+    }
+        <br />
+
+
+        @section scripts{
+            <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBG1TiWhyZbN7IyD4H76wipp0edrpY17zg&callback=myMap"></script>
+        }
+

@@ -1,0 +1,78 @@
+﻿@model tabib.Models.consulation
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<fieldset>
+    <legend>consulation</legend>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.title)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.title)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Question)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Question)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.DateOfconsulation)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.DateOfconsulation)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.reply)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.reply)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Isreplaied)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Isreplaied)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.DateOfreply)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.DateOfreply)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.PathImage)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.PathImage)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.KeyWords)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.KeyWords)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.UserProfileId)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.UserProfileId)
+    </div>
+</fieldset>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id=Model.consulationID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

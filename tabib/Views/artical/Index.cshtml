@@ -1,0 +1,61 @@
+﻿@model IEnumerable<tabib.Models.artical>
+
+@{
+    ViewBag.Title = "Artical";
+}
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+@foreach (var item in Model)
+{
+        <!--first artial-->
+    <h1 class="page-header">@Html.DisplayFor(modelItem => item.titleOfarticls)</h1>
+    
+    <p>
+        Written By
+        <span class="glyphicon glyphicon-user"></span>
+        <a href="#">Omran Alaa</a> At
+        <span class="glyphicon glyphicon-time"></span> @Html.DisplayFor(modelItem => item.DateOfarticals)
+        <span class="glyphicon glyphicon-list-alt"></span> @Html.DisplayFor(modelItem => item.typeOfarticls)
+    </p>
+    <hr />
+    <img src="@Url.Content(item.PathOfImage)" alt="No Image" class="image-responsive thumbnail" />
+    <hr />
+    <p>
+        @Html.DisplayFor(modelItem => item.TextArticles)
+    </p>
+    <a href="/artical/Details/@item.articalsID" class="btn btn-default">
+        Read more
+        <span class="glyphicon glyphicon-chevron-right"></span>
+    </a>
+     <hr />
+   
+}
+
+@if(User.Identity.Name.ToLower().Equals("admin"))
+{
+    <button type="button" class="btn btn-default" style="align-items:center">@Html.ActionLink("New Artical", "Create")</button>
+}
+
+<br />
+<br />
+<!--pagging-->
+<ul class="pager">
+    <li class="previous">
+        <a href="#"> &larr; older</a>
+    </li>
+
+   
+        <li><a href="#">1</a></li>
+        <li class="active"><a href="#">2</a></li>
+        <li><a href="#">3</a></li>
+        <li><a href="#">4</a></li>
+        <li><a href="#">5</a></li>
+   
+
+    <li class="next">
+        <a href="#"> Newer &rarr;</a>
+    </li>
+</ul>

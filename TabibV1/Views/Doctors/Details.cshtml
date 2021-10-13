@@ -1,0 +1,99 @@
+﻿@model TabibV1.Models.doctors
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>doctors</h4>
+	<hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.user.UserName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.user.UserName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.address)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.address)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.evaluate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.evaluate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.specialty)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.specialty)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TmieOfAppointment)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TmieOfAppointment)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.firstFrom)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.firstFrom)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.firstTo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.firstTo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.secondFrom)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.secondFrom)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.secondTo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.secondTo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Days)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Days)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.doctorsId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

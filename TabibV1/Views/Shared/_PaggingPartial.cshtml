@@ -1,0 +1,41 @@
+﻿@if (ViewBag.numberPage > 0)
+{
+    <ul class="pager">
+        <li class="previous">
+            @if (ViewBag.numberPage == 1 || ViewBag.CurrentPage == 1)
+            {
+                <a style="pointer-events: none;cursor: default;color: grey;" href=""> &larr; older</a>
+            }
+            else
+            {
+                <a href="@Url.Action("Index", @ViewBag.Contoller, new { page = ViewBag.CurrentPage - 1, search = ViewBag.search, category = ViewBag.category })"> &larr; older</a>
+            }
+        </li>
+
+        @for (int i = 1; i <= ViewBag.numberPage; i++)
+        {
+            if (i == ViewBag.CurrentPage)
+            {
+                <li class="active"><a id="@i" href="@Url.Action("Index", @ViewBag.Contoller, new { page = i, search = ViewBag.search, category = ViewBag.category })">@i</a></li>
+            }
+            else
+            {
+                <li><a id="@i" href="@Url.Action("Index", @ViewBag.Contoller, new { page = i, search = ViewBag.search, category = ViewBag.category })">@i</a></li>
+            }
+        }
+
+        <li class="next">
+            @if (ViewBag.numberPage == 1 || ViewBag.CurrentPage == ViewBag.numberPage)
+            {
+                <a style="pointer-events: none;cursor: default;color: grey;"> Newer &rarr;</a>
+            }
+            else
+            {
+                <a href="@Url.Action("Index", @ViewBag.Contoller, new { page = ViewBag.CurrentPage + 1, search = ViewBag.search, category = ViewBag.category })"> Newer &rarr;</a>
+            }
+        </li>
+    </ul>
+}
+
+<br />
+<hr />

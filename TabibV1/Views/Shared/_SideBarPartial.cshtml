@@ -1,0 +1,28 @@
+﻿<!--SideBar-->
+<div class="col-md-4" style="padding:15px;position:fixed;right:0;">
+    <div class="well">
+        <h4>searh Here</h4>
+        @using (Html.BeginForm("Index", (string)ViewBag.Contoller))
+        {<div class="input-group" >
+            @Html.TextBox("search", ViewBag.search as string, ViewBag.search as string, new { @class = "form-control",@style="max-width:none" })
+        <span class="input-group-btn">
+                 <button class="btn btn-primary" type="submit">
+                     <span class="glyphicon glyphicon-search"></span>
+                 </button>
+        </span>
+</div> }
+        
+    </div>
+
+    <div class="well">
+        <h4>category</h4>
+        <ul class="list-unstyled">
+            @for (int i = 0; i < ViewBag.allcategory.Count;i++)
+            {
+                <li>@Html.ActionLink(ViewBag.allcategory[i] as string, "Index", "@ViewBag.Contoller", new { category = ViewBag.allcategory[i] })</li>
+            }
+            <li>@Html.ActionLink("All", "Index", "@ViewBag.Contoller", new { category = "" })</li>
+        </ul>
+    </div>
+
+</div>

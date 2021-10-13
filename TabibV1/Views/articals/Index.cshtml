@@ -1,0 +1,130 @@
+﻿@model IEnumerable<TabibV1.Models.articals>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<br />
+<div class="row">
+    <div class="col-md-8">
+@if(Model.Count()>0){
+        foreach (var item in Model)
+{
+        <h1 class="page-header">@Html.DisplayFor(modelItem => item.titleOfarticls)</h1>
+        <p>
+            <span class="glyphicon glyphicon-user"></span> <a href="">@Html.DisplayFor(modelItem => item.articlWriter)  </a> &emsp;<span class="glyphicon glyphicon-time"></span>  @Html.DisplayFor(modelItem => item.DateOfarticals)  &emsp; <span class="glyphicon glyphicon-list-alt"></span>  @Html.DisplayFor(modelItem => item.typeOfarticls)
+ 
+        </p>
+        <hr />
+        <img src="@Url.Content("~/"+item.PathOfImage)" alt="No Image" style="width:300px;height:400px;" class="image-responsive thumbnail" />
+        <hr />
+        <p style="width: 100%; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; background: #fff; ">
+            @Html.DisplayFor(modelItem => item.TextArticles).
+        </p>
+        <a href="@Url.Action("Details", "articals", new { id = item.articalsID})" class="btn btn-default">
+            Read more
+            <span class="glyphicon glyphicon-chevron-right"></span>
+        </a>
+        <hr />}}
+               else
+               {
+    <h3 style="text-align:center;">No Item</h3>
+}
+
+        @if ( User.IsInRole("Admin"))
+        {
+            <button type="button" class="btn btn-default" style="align-items:center">@Html.ActionLink("New Artical", "Create")</button>
+            <hr />
+
+        }
+
+        <br />
+    </div>
+    <div class="col-md-4">
+        @Html.Partial("_SideBarPartial")
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-8">
+        @Html.Partial("_PaggingPartial")
+    </div>
+</div>
+
+    @* @foreach (var item in Model)
+        {
+                <!--first artial-->
+            <h1 class="page-header">@Html.DisplayFor(modelItem => item.titleOfarticls)</h1>
+
+            <p>
+                <span class="glyphicon glyphicon-user"></span> <a href="#">  </a>
+                <span class="glyphicon glyphicon-time"></span>  @Html.DisplayFor(modelItem => item.DateOfarticals)
+                <span class="glyphicon glyphicon-list-alt"></span>  @Html.DisplayFor(modelItem => item.typeOfarticls)
+            </p>
+            <hr />
+            <img src="@Url.Content(item.PathOfImage)" alt="No Image" class="image-responsive thumbnail" />
+            <hr />
+            <p>
+                @Html.DisplayFor(modelItem => item.TextArticles)
+            </p>
+            <a href="/artical/Details/@item.articalsID" class="btn btn-default">
+                Read more
+                <span class="glyphicon glyphicon-chevron-right"></span>
+            </a>
+            <hr />
+
+        }
+
+        @if (User.Identity.Name.ToLower().Equals("admin"))
+        {
+            <button type="button" class="btn btn-default" style="align-items:center">@Html.ActionLink("New Artical", "Create")</button>
+        }
+
+    *@
+
+
+    @*<table class="table">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.titleOfarticls)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.typeOfarticls)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.TextArticles)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.PathOfImage)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DateOfarticals)
+                </th>
+                <th></th>
+            </tr>
+
+        @foreach (var item in Model) {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.titleOfarticls)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.typeOfarticls)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TextArticles)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PathOfImage)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DateOfarticals)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id=item.articalsID }) |
+                    @Html.ActionLink("Details", "Details", new { id=item.articalsID }) |
+                    @Html.ActionLink("Delete", "Delete", new { id=item.articalsID })
+                </td>
+            </tr>
+        }
+
+        </table>*@

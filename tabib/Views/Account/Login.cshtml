@@ -1,0 +1,68 @@
+﻿@model tabib.Models.LoginModel
+
+@{
+    ViewBag.Title = "Log in";
+}
+
+      <section class="sign-in">
+                <div class="signin-content">
+                    <div class="col-md-6">
+                        <div class="signin-form">
+                            <h2 class="form-title">Sign up</h2>
+                            @using (Html.BeginForm(new { ReturnUrl = ViewBag.ReturnUrl }))
+                            {
+                                @Html.AntiForgeryToken()
+
+
+                                <div class="form-group">
+                                    @Html.ValidationMessageFor(m => m.UserName, "*")
+                                    <label for="UserName"><i class="zmdi zmdi-account material-icons-name"></i></label>
+                                    <input type="text" name="UserName" id="UserName" placeholder="Your Name" />
+
+                                </div>
+                                <div class="form-group">
+                                    @Html.ValidationMessageFor(m => m.Password, "*")
+                                    <label for="Password"><i class="zmdi zmdi-lock"></i></label>
+                                    <input type="password" name="Password" id="Password" placeholder="Password" />
+
+                                </div>
+                                <div class="form-group">
+                                    <input type="checkbox" name="RememberMe" id="RememberMe" class="agree-term" />
+                                    <label for="RememberMe" class="label-agree-term"><span><span></span></span>Remember me</label>
+                                </div>
+                                <div class="form-group form-button">
+                                    <input type="submit" name="signin" id="signin" class="btn btn-default"  value="Log in" />
+                                </div>
+                            }
+
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="signin-image">
+                            <figure><img src="~/Images/signin-image.jpg" alt="sing up image"></figure>
+                            <div class="signup-image-link">
+                                @Html.ActionLink("Register", "Register") if you don't have an account.
+                            </div>
+                        </div>
+                     
+                    </div>
+                </div>
+      </section>
+
+@*<div class="col-md-4">
+    <section id="socialLoginForm">
+        @Html.Partial("_ExternalLoginsListPartial", new { Action = "ExternalLogin", ReturnUrl = ViewBag.ReturnUrl })
+    </section>
+</div>*@
+
+@*<section class="social" id="socialLoginForm">
+    <h2>Use another service to log in.</h2>
+    @Html.Action("_ExternalLoginsListPartial", new { ReturnUrl = ViewBag.ReturnUrl })
+</section>*@
+
+@section Scripts {
+
+<script src="../../Scripts/vendor/jquery/jquery.min.js"></script>
+<script src="../../Scripts/main.js"></script>
+    @Scripts.Render("~/bundles/jqueryval")
+}

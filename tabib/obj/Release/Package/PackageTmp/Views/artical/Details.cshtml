@@ -1,0 +1,22 @@
+﻿@model tabib.Models.artical
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<fieldset>
+    <legend>artical</legend>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.DateOfarticals)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.DateOfarticals)
+    </div>
+</fieldset>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id=Model.articalsID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

@@ -1,0 +1,90 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewBag.Title - My Tabib Application</title>
+    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <meta name="viewport" content="width=device-width" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <!-- Font Icon -->
+    <link rel="stylesheet" href="fonts/material-icon/css/material-design-iconic-font.min.css">
+
+    <!-- Main css -->
+    <link rel="stylesheet" href="../../Content/style.css">
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+
+    <div class="w3-top">
+        <div class="w3-bar w3-white w3-card" style="letter-spacing: 4px; padding: 2px 8px !important;" >
+            
+            <div class="float-left">
+                <p class="site-title">
+                 <!--<a href="Url.Action("Tabib","index", "Artical")><img src="~/Images/logo.jpg"  />  </a>  -->
+                 @Html.ActionLink("Tabibak", "Index", "Artical")
+                </p>    
+            </div>
+            <div class="w3-right w3-hide-small">
+                <section id="login">
+                    @Html.Partial("_LoginPartial")
+                </section>
+                <nav>
+                    <ul id="menu">
+                        <li>
+                            <a href="@Url.Action("index", "Artical")" class="w3-bar-item w3-button">Artical</a>
+                        @if (Request.IsAuthenticated)
+                        {
+                            <li>
+                                <a href="http://omranalaa2-001-site1.itempurl.com" class="w3-bar-item w3-button">patient</a>                          
+                                
+                        </li>
+                            <li>
+
+                                <a href="@Url.Action("index", "Consulation")" class="w3-bar-item w3-button">Consulation(@Session["notification"])</a>
+                        
+                      </li>
+                        }
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div id="body">
+        @RenderSection("featured", required: false)
+        @if (ViewBag.Title != "patient")
+        {
+            <section class="content-wrapper main-content clear-fix">
+            @RenderBody()
+        </section> 
+        }
+        else { 
+             @RenderBody()
+        }
+        
+    </div>
+
+    <footer>
+        <div class="content-wrapper">
+            <div class="float-left" style="color: black !important">
+                <p>&copy; @DateTime.Now.Year - My Tabib Application</p>
+                <p>Omran_168684</p>
+                <p>abdul_rahman_157518</p>
+                <p>saleh_154754</p>
+                <p>mohamad_152368</p>
+            </div>
+        </div>
+    </footer>
+
+
+
+    @Scripts.Render("~/bundles/jquery")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

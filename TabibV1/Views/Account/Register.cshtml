@@ -1,0 +1,90 @@
+﻿@using CaptchaMvc.HtmlHelpers;
+@*using MathCaptcha;*@
+@using CaptchaMvc;
+
+ 
+
+@model TabibV1.Models.RegisterViewModel
+@{
+    ViewBag.Title = "Register";
+}
+
+<h2>@ViewBag.Title.</h2>
+
+<div class="row">
+    <div class="col-md-8">
+        @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+        {
+            @Html.AntiForgeryToken()
+            <h4>Create a new account.</h4>
+            <hr />
+            @Html.ValidationSummary()
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.email, new { @class = "col-md-2 control-label" })
+                <div class="col-md-6">
+                    @Html.TextBoxFor(m => m.email, new { @class = "form-control", @placeholder = "email", @type = "email" })
+                </div>
+            </div>
+
+            <div class="form-group">
+
+                @Html.LabelFor(m => m.UserName, new { @class = "col-md-2 control-label" })
+                <div class="col-md-3">
+                    @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", @placeholder = "Username" })
+                </div>
+                <div class="col-md-3">
+                    @Html.TextBoxFor(m => m.LastName, new { @class = "form-control", @placeholder = "LastName" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.DateBirthday, new { @class = "col-md-2 control-label" })
+                <div class="col-md-6">
+                    @Html.TextBoxFor(m => m.DateBirthday, new { @class = "form-control", @placeholder = "DateBirthday", @type = "Date" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
+                <div class="col-md-3">
+                    @Html.PasswordFor(m => m.Password, new { @class = "form-control", @placeholder = "Password" })
+                </div>
+                <div class="col-md-3">
+                    @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control", @placeholder = "ConfirmPassword" })
+                </div>
+            </div>
+           
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-6">
+                    @Html.MathCaptcha();
+                </div>
+            </div>
+            
+             <div class="form-group">
+                <div class="col-md-offset-2 col-md-6">
+                    <input type="submit" class="btn btn-default" value="Register" />
+                </div>
+            </div>
+       
+        }
+    </div>
+
+    <div class="col-md-4">
+        <section id="LoginImage">
+            <figure><img src="~/Images/signup-image.jpg" alt="sing up image"></figure>
+        </section>
+    </div>
+</div>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+<!--
+     <p class="Error">  ViewBag.ErrMessage </p>  
+
+           <div class="input-group-prepend col-md-2">
+              <span class="input-group-text"> <i class="glyphicon glyphicon-user"></i> </span>
+          </div>
+
+          -->

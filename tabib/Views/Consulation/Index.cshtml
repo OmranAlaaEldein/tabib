@@ -1,0 +1,54 @@
+﻿@model IEnumerable<tabib.Models.consulation>
+
+@{
+    ViewBag.Title = "Consultion";
+}
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+
+@foreach (var item in Model)
+{
+
+    <h1 class="page-header">@Html.DisplayFor(modelItem => item.title)</h1>
+
+    <p>
+        Written By
+        <span class="glyphicon glyphicon-user"></span> @Html.DisplayFor(modelItem => item.UserProfile.UserName) At
+        <span class="glyphicon glyphicon-time"></span> @Html.DisplayFor(modelItem => item.DateOfconsulation)
+        <span class="glyphicon glyphicon-list-alt"></span> @Html.DisplayFor(modelItem => item.KeyWords)
+    </p>
+    <hr />
+    <img src="@Url.Content("~"+item.PathImage)" alt="No Image" class="image-responsive thumbnail" />
+    <hr />
+    <p>
+        @Html.DisplayFor(modelItem => item.Question) ?
+    </p>
+    <hr />
+
+    if(item.reply != null)
+    {
+        <h3><b>Reply:</b></h3>
+        <p>@Html.DisplayFor(modelItem => item.reply)  </p>
+    }
+    else
+    {
+        <h3><b>No Reply Yet</b></h3>
+    }
+
+    <hr />
+
+    if(User.Identity.Name.ToLower().Equals("admin"))
+    {<button type="button" class="btn btn-default" style="float: right">@Html.ActionLink("Edit", "Edit", new { id = item.consulationID })</button>}
+
+
+
+
+
+}
+
+@if (!User.Identity.Name.ToLower().Equals("admin"))
+{
+    <button type="button" class="btn btn-default" style="align-self: center">@Html.ActionLink("New consultion", "Create") </button>
+}

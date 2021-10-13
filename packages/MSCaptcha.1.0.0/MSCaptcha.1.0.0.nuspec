@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>MSCaptcha</id>
+    <version>1.0.0</version>
+    <title>MSCaptcha</title>
+    <authors>Dmitry Kirsanov</authors>
+    <owners>Dmitry Kirsanov</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>This is unofficial nuget package for MSCaptcha.</description>
+    <summary />
+    <releaseNotes>This is first release of MSCaptcha to nuget.</releaseNotes>
+    <copyright>Copyright 2016</copyright>
+    <tags>MSCaptcha</tags>
+  </metadata>
+</package>
