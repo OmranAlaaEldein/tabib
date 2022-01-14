@@ -1,0 +1,132 @@
+﻿@model TabibV1.Models.appointments
+@using Newtonsoft.Json;
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using (Html.BeginForm()) 
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <h2>Create <small>appointment</small></h2>       
+        <hr />
+        @Html.ValidationSummary(true)
+
+        
+        <div class="form-group">
+           <span class="control-label col-md-2 glyphicon glyphicon-user"></span>
+           <div class="col-md-3">
+                @Html.DropDownList("specialty", (SelectList)ViewBag.specialties, "Select specialty", new { @class = "form-control", onchange = "changeDoctorsList(this)" })
+            </div>
+            <div class="col-md-3" id="">
+                @Html.DropDownList("doctor.doctorsId", Enumerable.Empty<SelectListItem>(), "Select Doctor", new { @class = "form-control", onchange = "changeDayList(this)" })            
+            </div>
+        </div>
+
+        <div class="form-group">
+           <span class="control-label col-md-2 glyphicon glyphicon-time"></span>
+            <div class="col-md-3" id="" >
+                @Html.DropDownList("Days", Enumerable.Empty<SelectListItem>(), "Select Day", new { @class = "form-control", onchange = "changeTimeList(this)" })
+            </div>
+            <div class="col-md-3" id="">
+                @Html.DropDownList("Time", Enumerable.Empty<SelectListItem>(), "Select Time", new { @class = "form-control", onchange = "" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.Question, new { @class = "col-md-2 control-label" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(m => m.Question, new { @class = "form-control", @placeholder = "Question?" })
+                @Html.ValidationMessageFor(model => model.Question)
+            </div>
+        </div>
+        
+        @if( Model!=null && DateTime.Now>Model.appointmentsTime){
+            <div class="form-group">
+            @Html.Label("back", new { @class = "control-label col-md-2" })
+            <div class="col-md-8">
+                @Html.EditorFor(model => model.Note, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Note)
+            </div>
+            <div class="col-md-2">
+                @Html.EditorFor(model => model.evaluation, new { @class = "form-control col-md-2" })
+                @Html.ValidationMessageFor(model => model.evaluation)
+            </div>
+        </div>
+        }
+        
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10" style="margin-top:10px;">
+                <input type="submit" id="Create" value="Create" class="btn btn-default" />
+                <a class="btn btn-default glyphicon glyphicon-home" style="float:left;margin-right:15px;" href="@Url.Action("Index", "Appointments")"> </a>
+            </div>
+        </div>
+    </div>
+}
+ <hr />
+@{
+    
+    string jsonString = JsonConvert.SerializeObject(
+           ViewBag.Doctors, typeof(Dictionary<string, List<TabibV1.Models.doctors>>),
+           Formatting.Indented,
+           new JsonSerializerSettings()
+           {
+               ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+           });
+
+}
+<script>
+    var Times=null;
+     
+    function changeDoctorsList(e)
+    {
+        var Doctors =JSON.parse(('@Html.Raw(Json.Encode(jsonString))').replace(/(&quot\;)/g,"\"").replace("\"{","{").replace("}\"","}"));
+        $("#doctor_doctorsId").empty().get(0).options.add(new Option("Select Doctor", ""));
+        $("#Days").empty().get(0).options.add(new Option("Select Days",""));
+        $("#Time").empty().get(0).options.add(new Option("Select Time",""));
+        
+        for (let item in Doctors[e.value]) {
+            $("#doctor_doctorsId").get(0).options.add(new Option(Doctors[e.value][item], item));
+        }
+    }
+
+    function changeDayList (e){
+        //$("#id").trigger('change');
+        $.ajax({
+            type: "get" ,
+            url: '@Url.Action("GetTimeofDoctor", "api/Support", new { }, Request.Url.Scheme)'+'?idDoctor='+e.value,
+            datatype: "json" ,
+            success: function (data) {
+                Times=data;
+                $("#Days").empty().get(0).options.add(new Option("Select Days",""));
+                $("#Time").empty().get(0).options.add(new Option("Select Time",""));
+                for(var x in data)
+                 {
+                    $("#Days").get(0).options.add(new Option(new Date(x).toLocaleString('en-us', {weekday:'long'}),x));
+                    // x.forEach(function(item){ });
+                 }
+            }
+        });
+    }
+
+    function changeTimeList(e)
+    {
+        if(Times!=null)
+        {
+            $("#Time").empty().get(0).options.add(new Option("Select Time",""));
+            for (let item in Times[e.value]) {
+                $("#Time").get(0).options.add(new Option(Times[e.value][item],Times[e.value][item]));
+            }
+        }
+        
+    }
+
+ $("#Create").click(function (e) {
+     if ($("#specialty").get(0).value == "" || $("#doctor_doctorsId").get(0).value == "" || $("#Days").get(0).value == "" || $("#Time").get(0).value == "") {
+         return false;
+     }
+ });
+</script>
+

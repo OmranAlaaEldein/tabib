@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Data.Entity.Spatial;
 using System.Linq;
 using System.Web;
 using TabibV1.Models;
@@ -34,6 +35,8 @@ namespace TabibV1.Models
         public string lang { set; get; }
         public string lat { set; get; }
         public string textAddress { set; get; }
+
+        public DbGeography Location { get; set; }
     }
 
     public class DoctorAppointment
@@ -89,8 +92,11 @@ namespace TabibV1.Models
             tempDays = tempDays + ((temchar.Length > 5 && temchar[5] == '1') ? "thursday , " : "");
             tempDays = tempDays + ((temchar.Length > 6 && temchar[6] == '1') ? "friday , " : "");
 
-            return tempDays;
+            return tempDays.ToLower();
         }
+
+        public virtual ICollection<doctors> doctors { get; set; }
+ 
     }
 
     public enum Days

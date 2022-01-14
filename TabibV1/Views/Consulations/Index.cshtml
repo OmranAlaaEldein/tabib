@@ -1,0 +1,229 @@
+﻿@model IEnumerable<TabibV1.Models.consulations>
+
+@{
+    ViewBag.Title = "Consulations";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<br />
+<br />
+
+@for (var i = 0; i < Model.Count(); i = i + 3)
+{
+    <div class="row">
+
+        @for (var e = i; e < i + 3 && e < Model.Count(); e++)
+        {
+            <div class="col-md-4">
+                <div class="media" style="border:1px solid #ccc;margin-top:0px;padding:10px 1px 10px 10px;border-radius:10px;" id="consulation_@Model.ElementAt(e).consulationID" name="consulation_@Model.ElementAt(e).consulationID">
+                    <div class="media-body">
+                        <h4 class="media-heading">@Model.ElementAt(e).title <small><i>@Model.ElementAt(e).specialty</i></small></h4>
+                        <h4 class="media-heading"> </h4>
+                        <p><span class="glyphicon glyphicon-question-sign"></span>&emsp; @Model.ElementAt(e).Question ? </p>
+                        <img src="@Model.ElementAt(e).PathImage" class="image-responsive thumbnail" style="max-width:400px;max-height:400px;align-items:center; border-radius:5px;">
+
+                        @if (Model.ElementAt(e).Isreplaied)
+                        {  <p><span class="glyphicon glyphicon-pencil"></span>&emsp; @Model.ElementAt(e).reply </p> }
+                        else
+                        { <p><span class="glyphicon glyphicon-pencil"></span>&emsp;  needReply </p>}
+
+                        @if (User.IsInRole("Admin") || User.IsInRole("patient"))
+                        {
+                            <p>
+                                <span class="glyphicon glyphicon-plus-sign"></span>&emsp;
+                                @if (@Model.ElementAt(e).doctor != null)
+                                {
+                                    <a href="@Url.Action("Index#Doctor_"+@Model.ElementAt(e).doctor.doctorsId, "Doctors")">@Model.ElementAt(e).DoctorName  </a>
+                                }
+                                else
+                                {
+                                    @Model.ElementAt(e).DoctorName
+                                }
+                            </p>
+                        }
+                        @if (User.IsInRole("Doctor") || User.IsInRole("Admin"))
+                        {
+                            <p><span class="glyphicon glyphicon-user"></span>&emsp;  @Model.ElementAt(e).patient.user.UserName @Model.ElementAt(e).patient.user.LastName </p>
+                        }
+                        <p><span class="glyphicon glyphicon-time"></span>&emsp; @Html.DisplayFor(m => m.ElementAt(e).DateOfconsulation) </p>
+                        @if (User.IsInRole("Doctor") || (User.IsInRole("patient") && !Model.ElementAt(e).Isreplaied))
+                    {
+                        <a class="btn btn-default  glyphicon glyphicon-edit" data-toggle="modal" data-target="#myModal_@Model.ElementAt(e).consulationID" style="float: left; margin: 10px;"> </a>
+                    }
+                        @if (User.IsInRole("Admin"))
+                    {
+                        using (Html.BeginForm("Delete", "Consulations", FormMethod.Post))
+                        {
+                        @Html.HiddenFor(model => @Model.ElementAt(e).consulationID)
+                        <button type="submit" onclick="return window.confirm('Delete Consulations \nAre you sure you want to delete this Consulations?')" class="btn btn-default glyphicon glyphicon-trash" style="margin:10px;"></button>
+                        @Html.AntiForgeryToken()
+                        }
+                    }
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal -->
+    <div class="modal fade" id="myModal_@Model.ElementAt(e).consulationID" role="dialog">
+        <div class="modal-dialog modal-lg">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+@using (Html.BeginForm("Edit", "Consulations", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h2>Edit <small>consulation</small> </h2>
+                </div>
+
+                <div class="modal-body">
+                        @Html.AntiForgeryToken()
+                        @Html.HiddenFor(model => model.ElementAt(e).consulationID)
+                        @Html.HiddenFor(model => model.ElementAt(e).DateOfconsulation)
+                        @Html.HiddenFor(model => model.ElementAt(e).DateOfreply)
+                        @Html.HiddenFor(model => model.ElementAt(e).Isreplaied)
+                        @Html.HiddenFor(model => model.ElementAt(e).PathImage)
+                        @Html.HiddenFor(model => model.ElementAt(e).DoctorName)
+                        @Html.Hidden("OldSpecialty", Model.ElementAt(e).specialty)
+                        @Html.HiddenFor(model => model.ElementAt(e).doctor.doctorsId)
+                        @Html.HiddenFor(model => model.ElementAt(e).doctor.specialty)
+                        @Html.HiddenFor(model => model.ElementAt(e).doctor.user.Id)
+                        @Html.HiddenFor(model => model.ElementAt(e).doctor.user.Email)  
+                        @Html.HiddenFor(model => model.ElementAt(e).doctor.user.UserName)
+                        @Html.HiddenFor(model => model.ElementAt(e).doctor.user.LastName)
+                        @Html.HiddenFor(model => model.ElementAt(e).patient.patientsId)
+                        @Html.HiddenFor(model => model.ElementAt(e).patient.user.Id)
+                        @Html.HiddenFor(model => model.ElementAt(e).patient.user.Email)
+                        @Html.HiddenFor(model => model.ElementAt(e).patient.user.UserName)
+                        @Html.HiddenFor(model => model.ElementAt(e).patient.user.LastName)
+
+
+                        <div class="form-horizontal">
+                            @Html.ValidationSummary(true)
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.ElementAt(e).title, new { @class = "col-md-2 control-label" })
+                                <div class="col-md-6">
+                                    @if (User.IsInRole("patient"))
+                                    {
+                                        @Html.TextBoxFor(m => m.ElementAt(e).title, new { @class = "form-control", @placeholder = "title" })
+                                        @Html.ValidationMessageFor(model => model.ElementAt(e).title)
+                                    }
+                                    else
+                                    {
+                                        @Html.HiddenFor(model => model.ElementAt(e).title)
+                                        @Html.DisplayFor(m => m.ElementAt(e).title, new { @class = "form-control", @placeholder = "title" })
+                                    }
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.ElementAt(e).Question, new { @class = "col-md-2 control-label" })
+                                <div class="col-md-6">
+                                    @if (User.IsInRole("patient"))
+                                    {
+                                        @Html.TextBoxFor(m => m.ElementAt(e).Question, new { @class = "form-control", @placeholder = "Question?" })
+                                        @Html.ValidationMessageFor(model => model.ElementAt(e).Question)
+                                    }
+                                    else
+                                    {@Html.HiddenFor(model => model.ElementAt(e).Question)
+                                        @Html.DisplayFor(m => m.ElementAt(e).Question, new { @class = "form-control" })   }
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-md-offset-2 col-md-2">
+                                    @if (User.IsInRole("patient"))
+                                    {<input type="file" name="upload" alt="Aa" id="upload" title="upload image" />
+                                        <br />
+                                    }
+                                    <img src="@Url.Content("~/" + Model.ElementAt(e).PathImage)" alt="Select Consulation Image .. " class="image-responsive thumbnail" id="image" height="300" width="250" style="margin:10px;" />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.ElementAt(e).specialty, new { @class = "control-label col-md-2" })
+                                <div class="col-md-3">
+                                    @if (User.IsInRole("Doctor"))
+                                    {
+                                        @Html.DropDownListFor(model => model.ElementAt(e).specialty, (SelectList)ViewBag.DoctorListItem,"Select Type" , new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.ElementAt(e).specialty)}
+                                    else
+                                    {
+                                        @Html.HiddenFor(model => model.ElementAt(e).specialty)
+                                        @Html.DisplayFor(m => m.ElementAt(e).specialty, new { @class = "form-control" })
+                                    }
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.ElementAt(e).reply, new { @class = "col-md-2 control-label" })
+                                <div class="col-md-6">
+                                    @if (User.IsInRole("Doctor"))
+                                    {
+                                        @Html.TextBoxFor(m => m.ElementAt(e).reply, new { @class = "form-control", @placeholder = "reply" })
+                                        @Html.ValidationMessageFor(model => model.ElementAt(e).reply) }
+                                    else
+                                    {
+                                        if (Model.ElementAt(e).Isreplaied)
+                                        {
+                                            @Html.HiddenFor(model => model.ElementAt(e).reply)
+                                            @Html.DisplayFor(m => m.ElementAt(e).reply)
+                                        }
+                                        else
+                                        { <p style="padding-top: 7px;"> need Reply</p> }
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    
+                </div>
+
+                <div class="modal-footer">
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10" style="margin-top:10px;">
+                            <input type="submit" id="save" value="Edit" class="btn btn-default" />
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-danger" style="display:none;" id="error">
+                        <span id="view-error"></span>
+                    </div>
+                  
+                </div>
+                }
+            </div>
+
+        </div>
+    </div>
+
+        }
+    </div>
+    <br />
+    <hr />
+    <br />
+}
+
+
+
+
+@if (Model.Count() == 0)
+{
+    <h3 style="text-align:center;margin-top:50px;">No Item</h3>
+}
+else
+{
+    <div class="row">
+        <div class="col-md-12">
+            @Html.Partial("_PaggingPartial")
+        </div>
+    </div>}
+
+
+@if (User.IsInRole("patient"))
+{
+    @Html.ActionLink("New Consulations", "Create", "Consulations", new { @class = "btn btn-default", style = "align-items:center" })
+   
+    <hr />
+}
+<br />

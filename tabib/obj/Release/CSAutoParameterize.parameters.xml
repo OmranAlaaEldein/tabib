@@ -1,9 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<parameters>
-  <parameter name="TabibConnection-Web.config Connection String" description="TabibConnection Connection String used in web.config by the application to access the database." defaultValue="Data Source=SQL5071.site4now.net;Initial Catalog=db_a742ba_tabib; User Id=db_a742ba_tabib_admin;Password=tabib2020;" tags="SqlConnectionString">
-    <parameterEntry kind="XmlFile" scope="C:\\project\\tabib\\tabib\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='TabibConnection']/@connectionString" />
-  </parameter>
-  <parameter name="oldTabibConnection-Web.config Connection String" description="oldTabibConnection Connection String used in web.config by the application to access the database." defaultValue="Data Source=DESKTOP-H6CDR6E;Initial Catalog=tabib;   Integrated Security=True;" tags="SqlConnectionString">
-    <parameterEntry kind="XmlFile" scope="C:\\project\\tabib\\tabib\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='oldTabibConnection']/@connectionString" />
-  </parameter>
-</parameters>

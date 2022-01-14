@@ -1,0 +1,105 @@
+﻿@model TabibV1.Models.consulations
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Create <small>consulation</small> </h2>
+
+@using (Html.BeginForm("Create", "Consulations", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true)
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.title, new { @class = "col-md-2 control-label" })
+            <div class="col-md-6">
+                @Html.TextBoxFor(m => m.title, new { @class = "form-control", @placeholder = "title" })
+                @Html.ValidationMessageFor(model => model.title)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.Question, new { @class = "col-md-2 control-label" })
+            <div class="col-md-6">
+                @Html.TextBoxFor(m => m.Question, new { @class = "form-control", @placeholder = "Question?" })
+                @Html.ValidationMessageFor(model => model.Question)
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-2">
+                <input type="file" name="upload" alt="Aa" id="upload" title="upload image" />
+                <br />
+                <img src="" alt="Select Consulation Image .. " class="image-responsive thumbnail" id="image" height="300" width="250" style="margin:10px;" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.specialty, new { @class = "control-label col-md-2" })
+            <div class="col-md-3">
+                @Html.DropDownListFor(model => model.specialty, (SelectList)ViewBag.DoctorListItem, "Select Type", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.specialty)
+            </div>
+        </div>
+
+        <br />
+        <hr />
+        <br />
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10" style="margin-top:10px;">
+                <input type="submit" id="save" value="Create" class="btn btn-default" />
+                <a class="btn btn-default glyphicon glyphicon-home" style="float:left;margin-right:15px;" href="@Url.Action("Index", "Consulations")"> </a>
+            </div>
+        </div>
+
+        <div class="alert alert-danger" style="display:none;" id="error">
+            <span id="view-error"></span>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        $(function () {
+            $("#upload").change(function (e) {
+                document.getElementById("image").src = window.URL.createObjectURL(document.getElementById("upload").files[0]);
+            });
+
+            $("#save").click(function () {
+                $("#view-error").text("");
+                if ($("#upload").val() == "") {
+                    $("#error").fadeIn();
+                    $("#view-error").append("enter file");
+                    return false;
+                }
+                else {
+                    var filename = document.getElementById("upload").value;
+                    var myextension = filename.substring(filename.lastIndexOf(".") + 1);
+                    var extension = ["png", "jpg", "gif", "bmp"];
+                    if ($.inArray(myextension, extension) == -1) {
+                        $("#error").fadeIn();
+                        $("#view-error").append("enter true file");
+                        document.getElementById("upload").value = null;
+                        return false;
+                    } else {
+                        var filesize = document.getElementById("upload").files[0].size / 1024 / 1024;
+                        if (filesize > 2) {
+                            $("#error").fadeIn();
+                            $("#view-error").append("enter true size file");
+                            document.getElementById("upload").value = null;
+                            return false;
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+}
+
+

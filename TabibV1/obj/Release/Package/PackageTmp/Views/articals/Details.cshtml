@@ -1,0 +1,85 @@
+﻿@model TabibV1.Models.articals
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2 class="page-header">@Html.DisplayFor(model => model.titleOfarticls)</h2>
+<p>
+    <span class="glyphicon glyphicon-user"></span> <a href="">@Html.DisplayFor(model => model.articlWriter)  </a> &emsp;<span class="glyphicon glyphicon-time"></span>  @Html.DisplayFor(model => model.DateOfarticals)  &emsp; <span class="glyphicon glyphicon-list-alt"></span>  dentist
+</p>
+<hr />
+<img src="@Url.Content("~/" + Model.PathOfImage)" alt="No Image" style="width:300px;height:400px;"  class="image-responsive thumbnail" />
+<hr />
+<p style="width: 100%; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; background: #fff; ">
+    @Html.DisplayFor(model => model.TextArticles).
+</p>
+
+<hr />
+
+@if (User.IsInRole("Admin"))
+{
+    <a class="btn btn-default glyphicon glyphicon-home" style="float:left;margin-right:15px;" href="@Url.Action( "Index", "articals")"> </a>
+    <a class="btn btn-default  glyphicon glyphicon-edit" style="float: left; margin-right: 15px;" href="@Url.Action("Edit", "articals", new { id = Model.articalsID })"> </a>
+
+    using (Html.BeginForm("Delete", "articals", FormMethod.Post))
+    {
+        @Html.HiddenFor(model => model.articalsID) 
+    <button type="submit" onclick="return window.confirm('Delete Artical \nAre you sure you want to delete this Artial?')" class="btn btn-default glyphicon glyphicon-trash"></button>  
+@Html.AntiForgeryToken()
+}
+}
+<br />
+<br />
+
+<hr />
+
+
+@*<div>
+    <h4>articals</h4>
+	<hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.titleOfarticls)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.titleOfarticls)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.typeOfarticls)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.typeOfarticls)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TextArticles)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TextArticles)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PathOfImage)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PathOfImage)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DateOfarticals)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DateOfarticals)
+        </dd>
+
+    </dl>
+</div>*@
+

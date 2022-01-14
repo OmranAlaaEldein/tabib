@@ -1,0 +1,65 @@
+﻿@model IEnumerable<TabibV1.Models.patients>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<br />
+<br />
+@if (Model.Count() == 0)
+{
+    <h4 style="text-align:center;">No Patient</h4>
+    <br />
+    <hr />
+    <br />
+}
+else
+{
+    for (var i = 0; i < Model.Count(); i = i + 3)
+    {
+        <div class="row">
+
+            @for (var e = i; e < i + 3 && e < Model.Count(); e++)
+            {
+                <div class="col-md-4">
+                    <div class="media" style="border:1px solid #ccc;margin-top:0px;padding:10px 1px 10px 10px;border-radius:10px;" id="patients_@Model.ElementAt(e).patientsId" name="patients_@Model.ElementAt(e).patientsId">
+                        <div class="media-body">
+                            <h4 class="media-heading" style="padding:10px">
+                                <strong>Patient </strong> <small>@Model.ElementAt(e).user.UserName</small>
+                            </h4>
+                            <p><span class="glyphicon glyphicon-user"></span>&emsp; @Model.ElementAt(e).user.UserName @Model.ElementAt(e).user.LastName <small><i>@Model.ElementAt(e).user.DateBirthday.Year</i></small></p>
+                            <p><span class="glyphicon glyphicon-envelope"></span>&emsp;  @Model.ElementAt(e).user.Email </p>
+                            @if (User.IsInRole("Doctor")) { 
+                                 <p><strong>Consulation</strong>&emsp;  @Model.ElementAt(e).consulation.Where(c => c.doctor.user.UserName == User.Identity.Name).Count() </p>
+                                 <p><strong>Appointment</strong>&emsp;  @Model.ElementAt(e).appointment.Where(c => c.doctor.user.UserName == User.Identity.Name).Count() </p>                                
+                            }
+                            else
+                            {
+                                <p><strong>Consulation</strong>&emsp;  @Model.ElementAt(e).consulation.Count </p>
+                                <p><strong>Appointment</strong>&emsp;  @Model.ElementAt(e).appointment.Count </p>                                                     
+                            }
+
+                            @if (User.IsInRole("patient")) { <p><strong>Visit</strong>&emsp;  @Model.ElementAt(e).countVisit </p> }
+                           
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        <br />
+        <hr />
+        <br />
+    }
+}
+
+
+@if (Model.Count() != 0)
+{
+    <div class="row">
+        <div class="col-md-12">
+            @Html.Partial("_PaggingPartial")
+        </div>
+    </div>
+}
+    <hr />

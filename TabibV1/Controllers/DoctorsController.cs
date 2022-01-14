@@ -1,7 +1,10 @@
-﻿using System;
+﻿using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.Data.Entity.Spatial;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -9,9 +12,11 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using TabibV1.Models;
+using TabibV1.OtherClass;
 
 namespace TabibV1.Controllers
 {
+    [AllowCrossSiteJsonAttribute]
     public class DoctorsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
@@ -68,37 +73,60 @@ namespace TabibV1.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [Log]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles="Admin")]
         public ActionResult Create([Bind(Include = "Email,UserName,LastName,DateBirthday,evaluate,specialty,firstFrom,firstTo,secondFrom,secondTo,Days,lat,lang,textAddress")] DoctorViewModel doctors, HttpPostedFileBase upload)
         {
             if (ModelState.IsValid)
             {
                 
                 var newDoctorAppointment = new DoctorAppointment() { Days = doctors.GetDays(), firstFrom = doctors.firstFrom, firstTo = doctors.firstTo, secondFrom = doctors.secondFrom, secondTo = doctors.secondTo };
-                var newAddress= new Address() {lang=doctors.lang,lat=doctors.lat, textAddress=doctors.textAddress};
+                var newAddress = new Address() { lang = doctors.lang, lat = doctors.lat, textAddress = doctors.textAddress, Location = DbGeography.FromText("POINT("+doctors.lat+" "+doctors.lang+")") };
                 string  fileName = doctors.UserName + "_" + doctors.LastName + "." + upload.FileName.Substring(upload.FileName.IndexOf(".") + 1);
-                string path = Path.Combine(Server.MapPath("~/images"), fileName);   //id
-                var newuser = new ApplicationUser() { Email = doctors.Email, UserName = doctors.UserName, LastName = doctors.LastName, DateBirthday = doctors.DateBirthday, PathOfImage = "/images/"+fileName };
-                var newDoctor = new doctors()
-                {
-                    user =newuser,// db.Users.Where(x=>x.Email.Equals(doctors.Email)).FirstOrDefault(),
-                    evaluate = doctors.evaluate,
-                    specialty = (doctors.specialty!="all")?doctors.specialty:"",
-                    DoctorAppointments = newDoctorAppointment,
-                    address = newAddress
-                };
-
-                db.myDoctors.Add(newDoctor);
-                db.SaveChanges();
-                upload.SaveAs(path);
+                string path = Path.Combine(Server.MapPath("~/images/doctors"), fileName);   //id
+                var newuser = new ApplicationUser() { Email = doctors.Email, UserName = doctors.UserName, LastName = doctors.LastName, DateBirthday = doctors.DateBirthday, PathOfImage = "/images/doctors/" + fileName };
                 
-                return RedirectToAction("Index");
+               var UserManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
+               
+                var result =  UserManager.Create(newuser,newuser.UserName);
+                if (result.Succeeded)
+                {
+                    var newDoctor = new doctors()
+                    {
+                        user = newuser,// db.Users.Where(x=>x.Email.Equals(doctors.Email)).FirstOrDefault(),
+                        evaluate = doctors.evaluate,
+                        specialty = (doctors.specialty != "all") ? doctors.specialty : "",
+                        DoctorAppointments = newDoctorAppointment,
+                        address = newAddress
+                    };
+                    db.myDoctors.Add(newDoctor);
+                    db.SaveChanges();
+
+                    UserManager.AddToRole(newDoctor.user.Id, "Doctor");
+                    upload.SaveAs(path);
+
+                    return RedirectToAction("Index");
+                }
             }
 
             return View(doctors);
         }
+        //protected override void OnException(ExceptionContext filterContext)
+        //{
+        //    filterContext.ExceptionHandled = true;
 
+        //    //filterContext.Result = RedirectToAction("Error", "InternalError");
+
+        //    filterContext.Result = new ViewResult
+        //    {
+        //        ViewName = "~/Views/Sahred/Error.cshtml"
+        //    };
+
+        //    base.OnException(filterContext);
+        //}
         // GET: /Doctors/Edit/5
+        [Authorize(Roles = "Admin,Doctor")]
         public ActionResult Edit(string id)
         {
             if (id == null)
@@ -110,7 +138,7 @@ namespace TabibV1.Controllers
             {
                 return HttpNotFound();
             }
-            var docview = new DoctorViewModel() { doctorsId=doctors.doctorsId,UserName=doctors.user.UserName,LastName=doctors.user.LastName,PathOfImage=doctors.user.PathOfImage,specialty=doctors.specialty,evaluate=doctors.evaluate,Days=doctors.DoctorAppointments.GetDays(),firstFrom=doctors.DoctorAppointments.firstFrom,firstTo=doctors.DoctorAppointments.firstTo,secondFrom=doctors.DoctorAppointments.secondFrom,secondTo=doctors.DoctorAppointments.secondTo,textAddress=doctors.address.textAddress,lang=doctors.address.lang,lat=doctors.address.lat };
+            var docview = new DoctorViewModel() { doctorsId = doctors.doctorsId, UserName = doctors.user.UserName, LastName = doctors.user.LastName, PathOfImage = doctors.user.PathOfImage, specialty = doctors.specialty, evaluate = doctors.evaluate, Days = doctors.DoctorAppointments.GetDays(), firstFrom = doctors.DoctorAppointments.firstFrom, firstTo = doctors.DoctorAppointments.firstTo, secondFrom = doctors.DoctorAppointments.secondFrom, secondTo = doctors.DoctorAppointments.secondTo, textAddress = doctors.address.textAddress, lang = doctors.address.Location.Longitude.ToString(), lat = doctors.address.Location.Latitude.ToString() };//doctors.address.lang doctors.address.lat
             return View(docview);
         }
 
@@ -119,6 +147,7 @@ namespace TabibV1.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,Doctor")]
         public ActionResult Edit([Bind(Include = "doctorsId,UserName,LastName,PathOfImage,evaluate,specialty,firstFrom,firstTo,secondFrom,secondTo,Days,lat,lang,textAddress")] DoctorViewModel doctors, HttpPostedFileBase upload)
         {
 
@@ -131,6 +160,7 @@ namespace TabibV1.Controllers
                 oldDoctor.specialty = doctors.specialty;
                 oldDoctor.address.lang = doctors.lang;
                 oldDoctor.address.lat = doctors.lat;
+                oldDoctor.address.Location = DbGeography.FromText("POINT("+doctors.lat+" "+doctors.lang+")");
                 oldDoctor.address.textAddress = doctors.textAddress;
                 oldDoctor.DoctorAppointments.Days = doctors.GetDays();
                 oldDoctor.DoctorAppointments.firstFrom = doctors.firstFrom;
@@ -148,9 +178,9 @@ namespace TabibV1.Controllers
                     }
 
                     string fileName = doctors.UserName + "_" + doctors.LastName + "." + upload.FileName.Substring(upload.FileName.IndexOf(".") + 1);
-                    string path = Path.Combine(Server.MapPath("~/images"), fileName);   //id
+                    string path = Path.Combine(Server.MapPath("~/images/doctors"), fileName);   //id
                     upload.SaveAs(path);
-                    oldDoctor.user.PathOfImage = "/images/" + fileName;
+                    oldDoctor.user.PathOfImage = "/images/doctors/" + fileName;
                 }
 
                 //db.Entry(oldDoctor).State = EntityState.Modified;
@@ -162,6 +192,7 @@ namespace TabibV1.Controllers
         }
 
         // GET: /Doctors/Delete/5
+        [Authorize(Roles = "Admin")]
         public ActionResult Delete(string id)
         {
             if (id == null)
@@ -179,20 +210,21 @@ namespace TabibV1.Controllers
         // POST: /Doctors/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public ActionResult DeleteConfirmed(string doctorsId)
         {
-            doctors doctors = db.myDoctors.Where(e=>e.doctorsId==doctorsId).FirstOrDefault();
+            doctors doctors = db.myDoctors.Include(x=>x.user).Where(e=>e.doctorsId==doctorsId).FirstOrDefault();
             
             db.myAddress.Remove(doctors.address);  
             db.myDoctorAppointment.Remove(doctors.DoctorAppointments);  
             db.myAppointments.RemoveRange(doctors.appointment);
-            db.myDoctors.Remove(doctors);
-
+            
             FileInfo file = new FileInfo(Server.MapPath("~/" + doctors.user.PathOfImage));
             if (file.Exists)
             { file.Delete(); } 
-            db.Users.Remove(doctors.user); 
-            
+            db.Users.Remove(doctors.user);
+            db.myDoctors.Remove(doctors);
+
             db.SaveChanges();
             return RedirectToAction("Index");
         }

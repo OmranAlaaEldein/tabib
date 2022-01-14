@@ -9,6 +9,7 @@ using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
 using TabibV1.Models;
+using TabibV1.OtherClass;
 
 namespace TabibV1.Controllers
 {
@@ -27,22 +28,14 @@ namespace TabibV1.Controllers
             ViewBag.search = search;
             ViewBag.category = category;
             ViewBag.Contoller="articals";
-            int firstItem = (page > 0) ? ((page - 1) * 3) : 0;// page range [1-lenght/3(+1 if ,n)]
-            int numberItem = (page > 0) ? Math.Min(3, (result.Count() > 0) ? result.Count() - firstItem : 0) : Math.Min(3, result.Count()); //db.myArticals.Count() - Math.Min(page * 3, numberItem)
             ViewBag.numberPage = Math.Ceiling(Convert.ToDouble(result.Count() / 3.0));
-
-
-            if (Session["notification"] == null) // to get number consultion need to reply ()
-            {
-                if (User.IsInRole("Admin"))  // to admin all consultion not have reply
-                    Session["notification"] = db.myConsulations.Where(x => x.Isreplaied == false).Count();
-                else  // to user all consultion by this user need to reply
-                    Session["notification"] = db.myConsulations.Include(x => x.patient).Where(x => x.Isreplaied == false
-                        && x.patient.user.UserName.Equals(User.Identity.Name)).Count();
+            if (User.Identity.IsAuthenticated) {
+                Session["role"] = User.IsInRole("Admin") ? "Admin" : (User.IsInRole("Doctor") ? "Doctor" : "patient");
+                Session["name"] = User.Identity.Name;
             }
 
+            int firstItem = (page > 0) ? ((page - 1) * 3) : 0,numberItem = (page > 0) ? Math.Min(3, (result.Count() > 0) ? result.Count() - firstItem : 0) : Math.Min(3, result.Count());
             return View(result.GetRange(firstItem, numberItem));
-
         }
 
         // GET: /articals/Details/5
@@ -77,14 +70,11 @@ namespace TabibV1.Controllers
         {
             if (ModelState.IsValid)
             {
-
-
-                string path = Path.Combine(Server.MapPath("~/Images"), upload.FileName);
+                string path = Path.Combine(Server.MapPath("~/Images/articals"), upload.FileName);
                 upload.SaveAs(path);
-                articals.PathOfImage = "/Images/" + upload.FileName;
+                articals.PathOfImage = "/Images/articals/" + upload.FileName;
                 articals.DateOfarticals = DateTime.Now;
-                
-
+              
                 db.myArticals.Add(articals);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -119,8 +109,6 @@ namespace TabibV1.Controllers
         {
             if (ModelState.IsValid)
             {
-
-
                 if (upload != null)
                 { //delete old image before add new
                     string oldFile = Server.MapPath("~/" + articals.PathOfImage);
@@ -130,15 +118,10 @@ namespace TabibV1.Controllers
                         file.Delete();
                     }
 
-                    string path = Path.Combine(Server.MapPath("~/Images"), upload.FileName);
+                    string path = Path.Combine(Server.MapPath("~/Images/articals"), upload.FileName);
                     upload.SaveAs(path);
-                    articals.PathOfImage = "/Images/" + upload.FileName;
+                    articals.PathOfImage = "/Images/articals/" + upload.FileName;
                 }
-                
-
-
-
-
                 db.Entry(articals).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -190,5 +173,19 @@ namespace TabibV1.Controllers
             }
             base.Dispose(disposing);
         }
+
+        //protected override void OnException(ExceptionContext filterContext)
+        //{
+        //    filterContext.ExceptionHandled = true;
+
+        //    filterContext.Result = RedirectToAction("Error", "InternalError");
+
+        //    filterContext.Result = new ViewResult
+        //    {
+        //        ViewName = "~/Views/Sahred/Error.cshtml"
+        //    };
+
+        //    base.OnException(filterContext);
+        //}
     }
 }

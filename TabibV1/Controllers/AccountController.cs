@@ -11,6 +11,9 @@ using Microsoft.Owin.Security;
 using TabibV1.Models;
 using CaptchaMvc.HtmlHelpers;  
 using System.Web.Security;
+using System.Linq;
+using System.Data.Entity;
+using TabibV1.OtherClass;
 //using WebMatrix.WebData;
 
 
@@ -54,9 +57,6 @@ namespace TabibV1.Controllers
                 if (user != null)
                 {
                     await SignInAsync(user, model.RememberMe);
-
-                    Session["notification"] = 0;
-
                     return RedirectToLocal(returnUrl);
                 }
                 else
@@ -95,9 +95,7 @@ namespace TabibV1.Controllers
                     return RedirectToAction("Index", "articals");
                 }
                 else
-                {
                     AddErrors(result);
-                }
             }
 
             // If we got this far, something failed, redisplay form

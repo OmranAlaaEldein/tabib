@@ -21,13 +21,19 @@ namespace TabibV1.Models
         public string Question { get; set; }
 
         [DataType(DataType.DateTime)]
-        public DateTime DateOfconsulation { get; set; }
+        public DateTime DateOfconsulation
+        {
+            get;
+            set;
+        }
 
         [StringLength(500, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 10)]
         public string reply { get; set; }
 
         public bool Isreplaied { get; set; }
 
+        public bool IsReading { get; set; }
+        
         [DataType(DataType.DateTime)]
         public DateTime? DateOfreply { get; set; }
 
@@ -35,8 +41,11 @@ namespace TabibV1.Models
         public string PathImage { get; set; }
 
         [StringLength(50, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 2)]
-        public string KeyWords { get; set; }
+        public string specialty { get; set; }
 
+        [Display(Name = "Doctor Name")]
+        [MaxLength(50)]
+        public string DoctorName { get; set; }
         public virtual doctors doctor { get; set; }
         public virtual patients patient { get; set; }
     }

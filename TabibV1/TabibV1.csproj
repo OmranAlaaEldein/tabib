@@ -43,10 +43,20 @@
     <Reference Include="CaptchaMvc">
       <HintPath>..\packages\CaptchaMvc.Mvc4.1.5.0\lib\net40-full\CaptchaMvc.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.AspNet.SignalR.Core">
+      <HintPath>..\packages\Microsoft.AspNet.SignalR.Core.2.4.2\lib\net45\Microsoft.AspNet.SignalR.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.SignalR.SystemWeb">
+      <HintPath>..\packages\Microsoft.AspNet.SignalR.SystemWeb.2.4.2\lib\net45\Microsoft.AspNet.SignalR.SystemWeb.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Owin, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.Owin.2.1.0\lib\net45\Microsoft.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Host.SystemWeb, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.Owin.Host.SystemWeb.2.1.0\lib\net45\Microsoft.Owin.Host.SystemWeb.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Owin.Security, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -56,9 +66,14 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.Owin.Security.Google.2.1.0\lib\net45\Microsoft.Owin.Security.Google.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -109,10 +124,6 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.0.0\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <Private>True</Private>
-      <HintPath>..\packages\Newtonsoft.Json.5.0.6\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="WebGrease">
       <Private>True</Private>
       <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
@@ -153,9 +164,6 @@
     <Reference Include="Owin">
       <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Owin.Host.SystemWeb">
-      <HintPath>..\packages\Microsoft.Owin.Host.SystemWeb.2.0.0\lib\net45\Microsoft.Owin.Host.SystemWeb.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.Owin.Security.Facebook">
       <HintPath>..\packages\Microsoft.Owin.Security.Facebook.2.0.0\lib\net45\Microsoft.Owin.Security.Facebook.dll</HintPath>
     </Reference>
@@ -179,9 +187,13 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\AppointmentController.cs" />
     <Compile Include="Controllers\articalsController.cs" />
+    <Compile Include="Controllers\ConsulationsController.cs" />
     <Compile Include="Controllers\DoctorsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\patientController.cs" />
+    <Compile Include="Controllers\SupportController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -225,6 +237,26 @@
     <Compile Include="Migrations\202110042140179_intkey2.Designer.cs">
       <DependentUpon>202110042140179_intkey2.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202110240509553_consulationSpecilate.cs" />
+    <Compile Include="Migrations\202110240509553_consulationSpecilate.Designer.cs">
+      <DependentUpon>202110240509553_consulationSpecilate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202111070958029_reaNoti.cs" />
+    <Compile Include="Migrations\202111070958029_reaNoti.Designer.cs">
+      <DependentUpon>202111070958029_reaNoti.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202112071112371_DoctorName.cs" />
+    <Compile Include="Migrations\202112071112371_DoctorName.Designer.cs">
+      <DependentUpon>202112071112371_DoctorName.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202112100629413_locgeometry.cs" />
+    <Compile Include="Migrations\202112100629413_locgeometry.Designer.cs">
+      <DependentUpon>202112100629413_locgeometry.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202112130803011_updateAppointment.cs" />
+    <Compile Include="Migrations\202112130803011_updateAppointment.Designer.cs">
+      <DependentUpon>202112130803011_updateAppointment.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\appointments.cs" />
@@ -235,6 +267,10 @@
     <Compile Include="Models\myModel.cs" />
     <Compile Include="Models\patients.cs" />
     <Compile Include="Models\searches.cs" />
+    <Compile Include="OtherClass\AllowCrossSiteJsonAttribute.cs" />
+    <Compile Include="OtherClass\Log.cs" />
+    <Compile Include="OtherClass\Notification.cs" />
+    <Compile Include="OtherClass\testSignalR.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -267,6 +303,7 @@
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="Content\bootstrap.min.css.map" />
     <Content Include="Content\bootstrap.css.map" />
+    <None Include="Properties\PublishProfiles\omran.pubxml" />
     <None Include="Scripts\jquery-3.0.0.intellisense.js" />
     <Content Include="Scripts\jquery-3.0.0.js" />
     <Content Include="Scripts\jquery-3.0.0.min.js" />
@@ -275,6 +312,8 @@
     <Content Include="Scripts\jquery-3.0.0.slim.min.map" />
     <Content Include="Scripts\jquery-3.0.0.min.map" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.signalR-2.4.2.js" />
+    <Content Include="Scripts\jquery.signalR-2.4.2.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
@@ -402,6 +441,22 @@
     <Content Include="Views\Doctors\Index.cshtml" />
     <Content Include="Views\Shared\_PaggingPartial.cshtml" />
     <Content Include="Views\Shared\_SideBarPartial.cshtml" />
+    <Content Include="Views\Consulations\Create.cshtml" />
+    <Content Include="Views\Consulations\Delete.cshtml" />
+    <Content Include="Views\Consulations\Details.cshtml" />
+    <Content Include="Views\Consulations\Edit.cshtml" />
+    <Content Include="Views\Consulations\Index.cshtml" />
+    <Content Include="Views\Appointment\Create.cshtml" />
+    <Content Include="Views\Appointment\Delete.cshtml" />
+    <Content Include="Views\Appointment\Details.cshtml" />
+    <Content Include="Views\Appointment\Edit.cshtml" />
+    <Content Include="Views\Appointment\Index.cshtml" />
+    <Content Include="Views\patient\Create.cshtml" />
+    <Content Include="Views\patient\Delete.cshtml" />
+    <Content Include="Views\patient\Details.cshtml" />
+    <Content Include="Views\patient\Edit.cshtml" />
+    <Content Include="Views\patient\Index.cshtml" />
+    <Content Include="Views\Home\Chat.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -440,6 +495,21 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202110042140179_intkey2.resx">
       <DependentUpon>202110042140179_intkey2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202110240509553_consulationSpecilate.resx">
+      <DependentUpon>202110240509553_consulationSpecilate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202111070958029_reaNoti.resx">
+      <DependentUpon>202111070958029_reaNoti.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202112071112371_DoctorName.resx">
+      <DependentUpon>202112071112371_DoctorName.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202112100629413_locgeometry.resx">
+      <DependentUpon>202112100629413_locgeometry.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202112130803011_updateAppointment.resx">
+      <DependentUpon>202112130803011_updateAppointment.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

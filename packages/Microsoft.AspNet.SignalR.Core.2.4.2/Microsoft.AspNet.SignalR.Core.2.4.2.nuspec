@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>Microsoft.AspNet.SignalR.Core</id>
+    <version>2.4.2</version>
+    <title>Microsoft ASP.NET SignalR Core Components</title>
+    <authors>Microsoft</authors>
+    <owners>Microsoft</owners>
+    <licenseUrl>https://raw.githubusercontent.com/SignalR/SignalR/2.3.0/LICENSE.txt</licenseUrl>
+    <projectUrl>https://www.asp.net/signalr</projectUrl>
+    <iconUrl>https://api.nuget.org/v3-flatcontainer/microsoft.aspnet.signalr.core/2.4.2/icon</iconUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <description>Async signaling library for .NET to help build real-time, multi-user interactive web applications.</description>
+    <summary />
+    <releaseNotes>https://github.com/SignalR/SignalR/releases</releaseNotes>
+    <copyright>© Microsoft Corporation. All rights reserved.</copyright>
+    <tags>Microsoft AspNet SignalR AspNetSignalR Core</tags>
+    <dependencies>
+      <group targetFramework=".NETFramework4.5">
+        <dependency id="Microsoft.Owin.Security" version="2.1.0" />
+        <dependency id="Newtonsoft.Json" version="6.0.4" />
+      </group>
+    </dependencies>
+    <frameworkAssemblies>
+      <frameworkAssembly assemblyName="Microsoft.CSharp" targetFramework=".NETFramework4.5" />
+      <frameworkAssembly assemblyName="System.Security" targetFramework=".NETFramework4.5" />
+    </frameworkAssemblies>
+  </metadata>
+</package>

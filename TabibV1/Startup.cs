@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.AspNet.SignalR;
+using Microsoft.AspNet.SignalR.Infrastructure;
 using Microsoft.Owin;
 using Owin;
 using System;
@@ -14,7 +16,9 @@ namespace TabibV1
         public void Configuration(IAppBuilder app)
         {
             ConfigureAuth(app);
-             createRoles();
+            app.MapSignalR();
+            GlobalHost.DependencyResolver.Register(typeof(IUserIdProvider), () => new PrincipalUserIdProvider());//app.map(typeof(IUserIdProvider), typeof(PrincipalUserIdProvider));
+            createRoles();
         }
 
          public void createRoles() {
@@ -51,18 +55,3 @@ namespace TabibV1
          }
     }
 }
-
-
-//if (Roles.GetAllRoles().Length== 0)
-//     {
-//         Roles.CreateRole("adminstration");
-//         Roles.CreateRole("patient");
-//         Roles.CreateRole("Doctor");
-
-//    var user = new ApplicationUser() { Email ="", UserName = "Admin", LastName = "adminstration", DateBirthday = new DateTime(1996,27,8)};
-//     var result =  UserManager.CreateAsync(user, "Admin");
-//     if (result.Succeeded)
-//     {
-//          Roles.AddUserToRole("admin", "adminstration");
-//           }
-//}

@@ -56,7 +56,6 @@ C:\project\tabib\TabibV1\bin\Microsoft.Owin.Security.OAuth.xml
 C:\project\tabib\TabibV1\bin\Microsoft.Owin.Security.Google.xml
 C:\project\tabib\TabibV1\bin\Microsoft.Owin.Security.Twitter.xml
 C:\project\tabib\TabibV1\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
-C:\project\tabib\TabibV1\obj\Debug\TabibV1.csprojResolveAssemblyReference.cache
 C:\project\tabib\TabibV1\obj\Debug\TabibV1.Migrations.buildDB.resources
 C:\project\tabib\TabibV1\obj\Debug\TabibV1.csproj.GenerateResource.Cache
 C:\project\tabib\TabibV1\obj\Debug\TabibV1.dll
@@ -73,3 +72,15 @@ C:\project\tabib\TabibV1\obj\Debug\TabibV1.Migrations.keyAddDocApp.resources
 C:\project\tabib\TabibV1\obj\Debug\TabibV1.Migrations.intkey.resources
 C:\project\tabib\TabibV1\obj\Debug\TabibV1.Migrations.intkey1.resources
 C:\project\tabib\TabibV1\obj\Debug\TabibV1.Migrations.intkey2.resources
+C:\project\tabib\TabibV1\obj\Debug\TabibV1.Migrations.consulationSpecilate.resources
+C:\project\tabib\TabibV1\bin\Microsoft.AspNet.SignalR.Core.dll
+C:\project\tabib\TabibV1\bin\Microsoft.AspNet.SignalR.SystemWeb.dll
+C:\project\tabib\TabibV1\bin\Microsoft.AspNet.SignalR.Core.pdb
+C:\project\tabib\TabibV1\bin\Microsoft.AspNet.SignalR.Core.xml
+C:\project\tabib\TabibV1\bin\Microsoft.AspNet.SignalR.SystemWeb.pdb
+C:\project\tabib\TabibV1\bin\Microsoft.AspNet.SignalR.SystemWeb.xml
+C:\project\tabib\TabibV1\obj\Debug\TabibV1.Migrations.reaNoti.resources
+C:\project\tabib\TabibV1\obj\Debug\TabibV1.csprojResolveAssemblyReference.cache
+C:\project\tabib\TabibV1\obj\Debug\TabibV1.Migrations.DoctorName.resources
+C:\project\tabib\TabibV1\obj\Debug\TabibV1.Migrations.locgeometry.resources
+C:\project\tabib\TabibV1\obj\Debug\TabibV1.Migrations.updateAppointment.resources
